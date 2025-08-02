@@ -1,22 +1,78 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { Eye, EyeOff, User, Lock, UserCircle, Users } from 'lucide-react'
+import { Eye, EyeOff, User, Lock, UserCircle, Users, BookOpen, Shield } from 'lucide-react'
+
+// Demo credentials for testing
+const DEMO_CREDENTIALS = {
+  principal: {
+    username: 'principal@dhikmah.edu',
+    password: 'admin123',
+    email: 'principal@dhikmah.edu'
+  },
+  teacher: {
+    username: 'teacher001',
+    password: 'teach123',
+    email: 'teacher@dhikmah.edu'
+  },
+  guardian: {
+    username: 'guardian001',
+    password: 'parent123',
+    email: 'guardian@email.com'
+  }
+}
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
-  const [loginType, setLoginType] = useState<'principal' | 'guardian'>('principal')
+  const [loginType, setLoginType] = useState<'principal' | 'teacher' | 'guardian'>('principal')
   const [formData, setFormData] = useState({
     username: '',
     password: '',
     remember: false
   })
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [showDemo, setShowDemo] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log('Login attempt:', { ...formData, loginType })
+    setIsLoading(true)
+    setError('')
+
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      // Check credentials
+      const credentials = DEMO_CREDENTIALS[loginType]
+      if (formData.username === credentials.username && formData.password === credentials.password) {
+        // Store user data in localStorage (in production, use secure tokens)
+        const userData = {
+          userType: loginType,
+          username: formData.username,
+          email: credentials.email,
+          loginTime: new Date().toISOString(),
+          remember: formData.remember
+        }
+        
+        localStorage.setItem('userAuth', JSON.stringify(userData))
+        
+        // Redirect based on user type
+        if (loginType === 'principal') {
+          window.location.href = '/dashboard-principal'
+        } else if (loginType === 'teacher') {
+          window.location.href = '/dashboard-teacher'
+        } else {
+          window.location.href = '/dashboard-guardian'
+        }
+      } else {
+        setError('ভুল ব্যবহারকারীর নাম বা পাসওয়ার্ড!')
+      }
+    } catch (err) {
+      setError('লগইন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +81,46 @@ export default function Login() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }))
+    // Clear error when user starts typing
+    if (error) setError('')
   }
+
+  const fillDemoCredentials = () => {
+    const credentials = DEMO_CREDENTIALS[loginType]
+    setFormData(prev => ({
+      ...prev,
+      username: credentials.username,
+      password: credentials.password
+    }))
+  }
+
+  const getLoginTypeInfo = () => {
+    switch(loginType) {
+      case 'principal':
+        return {
+          title: 'প্রিন্সিপাল',
+          placeholder: 'principal@dhikmah.edu',
+          description: 'আপনার প্রশাসনিক প্যানেলে প্রবেশ করুন',
+          features: ['শিক্ষার্থীদের তথ্য দেখুন', 'পরীক্ষার ফলাফল পরিচালনা করুন', 'শিক্ষক ও কর্মচারী তথ্য', 'আর্থিক রিপোর্ট']
+        }
+      case 'teacher':
+        return {
+          title: 'শিক্ষক',
+          placeholder: 'teacher001',
+          description: 'আপনার শিক্ষক প্যানেলে প্রবেশ করুন',
+          features: ['ক্লাসের তথ্য দেখুন', 'পরীক্ষার ফলাফল দিন', 'উপস্থিতি নিন', 'অ্যাসাইনমেন্ট দিন']
+        }
+      case 'guardian':
+        return {
+          title: 'অভিভাবক',
+          placeholder: 'শিক্ষার্থীর আইডি নম্বর',
+          description: 'আপনার সন্তানের তথ্য দেখুন',
+          features: ['পরীক্ষার ফলাফল', 'উপস্থিতির তথ্য', 'ফি পেমেন্ট স্ট্যাটাস', 'শিক্ষকের মন্তব্য']
+        }
+    }
+  }
+
+  const loginTypeInfo = getLoginTypeInfo()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
@@ -43,10 +138,10 @@ export default function Login() {
               </div>
             </div>
             <nav className="hidden md:flex space-x-6">
-              <Link href="/" className="text-gray-700 hover:text-green-700">Home</Link>
-              <Link href="/about" className="text-gray-700 hover:text-green-700">About</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-green-700">Contact</Link>
-              <Link href="/login" className="text-green-700 font-semibold hover:text-green-900">Login</Link>
+              <a href="/" className="text-gray-700 hover:text-green-700">Home</a>
+              <a href="/about" className="text-gray-700 hover:text-green-700">About</a>
+              <a href="/contact" className="text-gray-700 hover:text-green-700">Contact</a>
+              <a href="/login" className="text-green-700 font-semibold hover:text-green-900">Login</a>
             </nav>
           </div>
         </div>
@@ -65,40 +160,92 @@ export default function Login() {
                 <p className="text-gray-600 mt-2">আপনার অ্যাকাউন্টে প্রবেশ করুন</p>
               </div>
 
+              {/* Demo Credentials Button */}
+              <div className="mb-4">
+                <button
+                  type="button"
+                  onClick={() => setShowDemo(!showDemo)}
+                  className="w-full text-sm text-blue-600 hover:text-blue-700 underline"
+                >
+                  ডেমো ক্রেডেনশিয়াল দেখুন
+                </button>
+                {showDemo && (
+                  <div className="mt-2 p-3 bg-blue-50 rounded-lg text-sm">
+                    <p className="font-medium text-blue-800">
+                      {loginTypeInfo.title} ডেমো:
+                    </p>
+                    <p className="text-blue-700">
+                      <strong>ব্যবহারকারী:</strong> {DEMO_CREDENTIALS[loginType].username}
+                    </p>
+                    <p className="text-blue-700">
+                      <strong>পাসওয়ার্ড:</strong> {DEMO_CREDENTIALS[loginType].password}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={fillDemoCredentials}
+                      className="mt-2 px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+                    >
+                      অটো ফিল করুন
+                    </button>
+                  </div>
+                )}
+              </div>
+
               {/* Login Type Selection */}
               <div className="mb-6">
                 <div className="flex bg-gray-100 rounded-lg p-1">
                   <button
                     type="button"
                     onClick={() => setLoginType('principal')}
-                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center space-x-2 ${
+                    className={`flex-1 py-2 px-2 rounded-md text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
                       loginType === 'principal'
                         ? 'bg-green-600 text-white shadow-sm'
                         : 'text-gray-700 hover:text-green-600'
                     }`}
                   >
-                    <User className="h-4 w-4" />
+                    <Shield className="h-3 w-3" />
                     <span>প্রিন্সিপাল</span>
                   </button>
                   <button
                     type="button"
+                    onClick={() => setLoginType('teacher')}
+                    className={`flex-1 py-2 px-2 rounded-md text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
+                      loginType === 'teacher'
+                        ? 'bg-green-600 text-white shadow-sm'
+                        : 'text-gray-700 hover:text-green-600'
+                    }`}
+                  >
+                    <BookOpen className="h-3 w-3" />
+                    <span>শিক্ষক</span>
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setLoginType('guardian')}
-                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center space-x-2 ${
+                    className={`flex-1 py-2 px-2 rounded-md text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
                       loginType === 'guardian'
                         ? 'bg-green-600 text-white shadow-sm'
                         : 'text-gray-700 hover:text-green-600'
                     }`}
                   >
-                    <Users className="h-4 w-4" />
+                    <Users className="h-3 w-3" />
                     <span>অভিভাবক</span>
                   </button>
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Error Message */}
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-700 text-sm">{error}</p>
+                </div>
+              )}
+
+              <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {loginType === 'principal' ? 'ব্যবহারকারীর নাম' : 'শিক্ষার্থীর আইডি'}
+                    {loginType === 'principal' ? 'ইমেইল/ব্যবহারকারীর নাম' : 
+                     loginType === 'teacher' ? 'শিক্ষক আইডি' : 
+                     'শিক্ষার্থীর আইডি'}
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -109,7 +256,8 @@ export default function Login() {
                       onChange={handleInputChange}
                       required
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                      placeholder={loginType === 'principal' ? 'আপনার ব্যবহারকারীর নাম' : 'শিক্ষার্থীর আইডি নম্বর'}
+                      placeholder={loginTypeInfo.placeholder}
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
@@ -128,11 +276,13 @@ export default function Login() {
                       required
                       className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       placeholder="আপনার পাসওয়ার্ড"
+                      disabled={isLoading}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-3 h-5 w-5 text-gray-400 hover:text-gray-600"
+                      disabled={isLoading}
                     >
                       {showPassword ? <EyeOff /> : <Eye />}
                     </button>
@@ -147,6 +297,7 @@ export default function Login() {
                       checked={formData.remember}
                       onChange={handleInputChange}
                       className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                      disabled={isLoading}
                     />
                     <span className="ml-2 text-sm text-gray-700">মনে রাখুন</span>
                   </label>
@@ -157,41 +308,49 @@ export default function Login() {
 
                 <button
                   type="submit"
-                  className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors font-medium"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                  className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                  লগইন করুন
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      লগইন হচ্ছে...
+                    </>
+                  ) : (
+                    'লগইন করুন'
+                  )}
                 </button>
-              </form>
+              </div>
 
               {/* Additional Info */}
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <div className="text-center">
                   <p className="text-sm text-gray-600 mb-4">
-                    {loginType === 'principal' ? 'প্রিন্সিপাল লগইন' : 'অভিভাবক লগইন'}
+                    {loginTypeInfo.title} লগইন
                   </p>
-                  {loginType === 'principal' ? (
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-sm text-blue-800">
-                        <strong>প্রিন্সিপাল:</strong> আপনার প্রশাসনিক প্যানেলে প্রবেশ করুন
-                      </p>
-                      <ul className="text-xs text-blue-700 mt-2 space-y-1">
-                        <li>• শিক্ষার্থীদের তথ্য দেখুন</li>
-                        <li>• পরীক্ষার ফলাফল পরিচালনা করুন</li>
-                        <li>• শিক্ষক ও কর্মচারী তথ্য</li>
-                      </ul>
-                    </div>
-                  ) : (
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <p className="text-sm text-green-800">
-                        <strong>অভিভাবক:</strong> আপনার সন্তানের তথ্য দেখুন
-                      </p>
-                      <ul className="text-xs text-green-700 mt-2 space-y-1">
-                        <li>• পরীক্ষার ফলাফল</li>
-                        <li>• উপস্থিতির তথ্য</li>
-                        <li>• ফি পেমেন্ট স্ট্যাটাস</li>
-                      </ul>
-                    </div>
-                  )}
+                  <div className={`p-4 rounded-lg ${
+                    loginType === 'principal' ? 'bg-blue-50' :
+                    loginType === 'teacher' ? 'bg-purple-50' :
+                    'bg-green-50'
+                  }`}>
+                    <p className={`text-sm font-medium mb-2 ${
+                      loginType === 'principal' ? 'text-blue-800' :
+                      loginType === 'teacher' ? 'text-purple-800' :
+                      'text-green-800'
+                    }`}>
+                      <strong>{loginTypeInfo.title}:</strong> {loginTypeInfo.description}
+                    </p>
+                    <ul className={`text-xs space-y-1 ${
+                      loginType === 'principal' ? 'text-blue-700' :
+                      loginType === 'teacher' ? 'text-purple-700' :
+                      'text-green-700'
+                    }`}>
+                      {loginTypeInfo.features.map((feature, index) => (
+                        <li key={index}>• {feature}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
 
@@ -199,9 +358,9 @@ export default function Login() {
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-600">
                   সাহায্য প্রয়োজন? 
-                  <Link href="/contact" className="text-green-600 hover:text-green-700 ml-1">
+                  <a href="/contact" className="text-green-600 hover:text-green-700 ml-1">
                     যোগাযোগ করুন
-                  </Link>
+                  </a>
                 </p>
               </div>
             </div>

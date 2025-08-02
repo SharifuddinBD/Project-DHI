@@ -20,6 +20,10 @@ export default function RootLayout({
       <body className={`${inter.className} bg-gradient-to-br from-green-50 to-emerald-50 text-gray-800`}>
         {/* Page Content */}
         <main>{children}</main>
+        {/* Footer */}
+
+        
+        
       </body>
     </html>
   )

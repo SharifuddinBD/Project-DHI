@@ -1,5 +1,18 @@
-import Link from 'next/link'
-import { Phone, Mail, MapPin, Facebook, BookOpen, Users, Award, Clock } from 'lucide-react'
+'use client';
+
+import Link from 'next/link';
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Facebook,
+  BookOpen,
+  Users,
+  Award,
+  Clock,
+  Youtube,
+} from 'lucide-react';
+import FacebookFeed from './components/FacebookFeed'; // Make sure this component exists
 
 export default function Home() {
   return (
@@ -9,19 +22,33 @@ export default function Home() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-700 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">دار</span>
+              <div className="w-16 h-16 bg-gradient-to-br from-green-300 to-emerald-700 rounded-full flex items-center justify-center">
+                <img
+                  src="/images/madrashalogo.svg"
+                  alt="Darul Hikmah Institute Logo"
+                  className="w-12 h-12 object-contain"
+                />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-green-800">দারুল হিকমাহ ইনস্টিটিউট</h1>
+                <h1 className="text-2xl font-bold text-green-800">
+                  দারুল হিকমাহ ইনস্টিটিউট
+                </h1>
                 <p className="text-sm text-gray-600">DARUL HIKMAH INSTITUTE</p>
               </div>
             </div>
             <nav className="hidden md:flex space-x-6">
-              <Link href="/" className="text-green-700 font-semibold hover:text-green-900">Home</Link>
-              <Link href="/about" className="text-gray-700 hover:text-green-700">About</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-green-700">Contact</Link>
-              <Link href="/login" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Login</Link>
+              <Link href="/" className="text-green-700 font-semibold hover:text-green-900">
+                Home
+              </Link>
+              <Link href="/about" className="text-gray-700 hover:text-green-700">
+                About
+              </Link>
+              <Link href="/contact" className="text-gray-700 hover:text-green-700">
+                Contact
+              </Link>
+              <Link href="/login" className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                Login
+              </Link>
             </nav>
           </div>
         </div>
@@ -50,21 +77,9 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <h3 className="text-3xl font-bold text-center text-green-800 mb-12">আমাদের বৈশিষ্ট্যসমূহ</h3>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow">
-              <BookOpen className="w-12 h-12 text-green-600 mx-auto mb-4" />
-              <h4 className="text-xl font-semibold text-green-800 mb-3">হিফজুল কোরআন</h4>
-              <p className="text-gray-600">সহজ ও আধুনিক পদ্ধতিতে পবিত্র কোরআন মুখস্থ করানো হয়।</p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow">
-              <Users className="w-12 h-12 text-green-600 mx-auto mb-4" />
-              <h4 className="text-xl font-semibold text-green-800 mb-3">নাযেরা</h4>
-              <p className="text-gray-600">কোরআন শুদ্ধভাবে পড়া শেখানো হয়।</p>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow">
-              <Award className="w-12 h-12 text-green-600 mx-auto mb-4" />
-              <h4 className="text-xl font-semibold text-green-800 mb-3">মাদানী নেসাব</h4>
-              <p className="text-gray-600">ইসলামী শিক্ষার সাথে সাথে আধুনিক শিক্ষাও প্রদান করা হয়।</p>
-            </div>
+            <FeatureCard icon={<BookOpen />} title="হিফজুল কোরআন" desc="সহজ ও আধুনিক পদ্ধতিতে পবিত্র কোরআন মুখস্থ করানো হয়।" />
+            <FeatureCard icon={<Users />} title="নাযেরা" desc="কোরআন শুদ্ধভাবে পড়া শেখানো হয়।" />
+            <FeatureCard icon={<Award />} title="মাদানী নেসাব" desc="ইসলামী শিক্ষার সাথে সাথে আধুনিক শিক্ষাও প্রদান করা হয়।" />
           </div>
         </div>
       </section>
@@ -74,86 +89,117 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <h3 className="text-3xl font-bold text-center text-green-800 mb-12">কোর্স বিবরণ</h3>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <h4 className="text-2xl font-semibold text-green-800 mb-4">হিফজুল কোরআন ও নাহেরা বিভাগের বৈশিষ্ট্যাবলী:</h4>
-              <ul className="space-y-3 text-gray-700">
-                <li>• অনারভিত্তিক ও নিজস্ব পরিবেশে ব্যবস্থা</li>
-                <li>• প্রতি ১০/১২ জন ছাত্রের জন্য একজন অভিজ্ঞ ও প্রশিক্ষণপ্রাপ্ত শিক্ষকের দ্বারা নিয়মিত তত্ত্বাবধান</li>
-                <li>• হিফজের সাথে সাথে সাধারণ শিক্ষা প্রদান</li>
-                <li>• বিশেষ পরিচর্যা প্রাপ্ত ইয়াতিম শিক্ষার্থীদের জন্য বিশেষ ব্যবস্থা</li>
-              </ul>
-            </div>
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <h4 className="text-2xl font-semibold text-green-800 mb-4">কিতাব বিভাগের বৈশিষ্ট্যাবলী:</h4>
-              <ul className="space-y-3 text-gray-700">
-                <li>• জেনারেল শিক্ষা ও মাদানী নেসাব সমন্বিত পাঠ্যক্রম</li>
-                <li>• প্রথম বর্ষেই শিক্ষার্থীদের আরবি প্রবন্ধ লেখা, আরবি বক্তৃতা ও কিতাব বোঝার যোগ্যতা অর্জন</li>
-                <li>• দক্ষ ও অভিজ্ঞ শিক্ষকমণ্ডলী দ্বারা যুগ সহকারে পাঠদান</li>
-                <li>• আধুনিক সিলেবাস-সিলেবাস ও পথনির্দেশ মাধ্যমে আরবি ব্যাকরণ শিক্ষা</li>
-              </ul>
-            </div>
+            <CourseCard title="হিফজুল কোরআন ও নাযেরা বিভাগের বৈশিষ্ট্যাবলী:" items={[
+              "• অনারভিত্তিক ও নিজস্ব পরিবেশে ব্যবস্থা",
+              "• প্রতি ১০/১২ জন ছাত্রের জন্য একজন অভিজ্ঞ ও প্রশিক্ষণপ্রাপ্ত শিক্ষকের দ্বারা নিয়মিত তত্ত্বাবধান",
+              "• হিফজের সাথে সাথে সাধারণ শিক্ষা প্রদান",
+              "• বিশেষ পরিচর্যা প্রাপ্ত ইয়াতিম শিক্ষার্থীদের জন্য বিশেষ ব্যবস্থা"
+            ]} />
+            <CourseCard title="কিতাব বিভাগের বৈশিষ্ট্যাবলী:" items={[
+              "• জেনারেল শিক্ষা ও মাদানী নেসাব সমন্বিত পাঠ্যক্রম",
+              "• প্রথম বর্ষেই শিক্ষার্থীদের আরবি প্রবন্ধ লেখা, আরবি বক্তৃতা ও কিতাব বোঝার যোগ্যতা অর্জন",
+              "• দক্ষ ও অভিজ্ঞ শিক্ষকমণ্ডলী দ্বারা যুগ সহকারে পাঠদান",
+              "• আধুনিক সিলেবাস-সিলেবাস ও পথনির্দেশ মাধ্যমে আরবি ব্যাকরণ শিক্ষা"
+            ]} />
           </div>
         </div>
       </section>
 
-      {/* Session Info */}
+      {/* Admission Info */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="bg-gradient-to-r from-red-500 to-red-600 text-white p-8 rounded-xl text-center">
             <h3 className="text-2xl font-bold mb-4">ভর্তি বিজ্ঞপ্তি</h3>
             <div className="grid md:grid-cols-2 gap-4 mb-6">
-              <div className="bg-white bg-opacity-20 p-4 rounded-lg">
-                <p className="font-semibold">হিফজুল কোরআন বিভাগ</p>
-                <p>২৫শে শাবান ১৪৪৬ হি./২৫শে ফেব্রুয়ারি ২০২৫ হি শনিবার থেকে</p>
-              </div>
-              <div className="bg-white bg-opacity-20 p-4 rounded-lg">
-                <p className="font-semibold">কিতাব বিভাগ</p>
-                <p>৮ই শাওয়াল ১৪৪৬ হি./৭ই এপ্রিল ২০২৫ হি সোমবার থেকে</p>
-              </div>
+              <AdmissionCard title="হিফজুল কোরআন বিভাগ" date="২৫শে শাবান ১৪৪৬ হি. / ২৫শে ফেব্রুয়ারি ২০২৫ হি. শনিবার থেকে" />
+              <AdmissionCard title="কিতাব বিভাগ" date="৮ই শাওয়াল ১৪৪৬ হি. / ৭ই এপ্রিল ২০২৫ হি. সোমবার থেকে" color="#065084" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Info */}
-      <section className="py-16 bg-green-800 text-white">
-        <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">যোগাযোগ করুন</h3>
-          <div className="grid md:grid-cols-4 gap-6 text-center">
-            <div className="flex flex-col items-center">
-              <MapPin className="w-8 h-8 mb-3" />
-              <p className="font-semibold">Address</p>
-              <p>Shubheccha 364/B, Abidabad, Sheikhghat, Sylhet</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <Phone className="w-8 h-8 mb-3" />
-              <p className="font-semibold">Phone</p>
-              <p>+880 1318-043304</p>
-              <p>+880 1843-458020</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <Mail className="w-8 h-8 mb-3" />
-              <p className="font-semibold">Email</p>
-              <p>darulhikmahinstituee.edu.bd@gmail.com</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <Facebook className="w-8 h-8 mb-3" />
-              <p className="font-semibold">Facebook</p>
-              <p>https://www.facebook.com/DarulHikmahInstitute.edu</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Facebook Feed */}
+      <FacebookFeed />
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
+      <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="text-center">
-            <p>&copy; 2025 দারুল হিকমাহ ইনস্টিটিউট. All rights reserved.</p>
-            <p className="mt-2 text-gray-400">True Guidance Project - একটি প্রতিষ্ঠান</p>
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold mb-2">
+              জামেয়া শামীমাবাদে প্রাপ্ত <span className="text-green-400">৭৩৯ জন</span> হুজুর নিবিড় তত্ত্বাবধানে অধ্যয়নরত রয়েছে
+            </h2>
+            <p className="text-gray-300 text-sm">
+              সকাল পরিদর্শন ইসলামে উন্নত সভ্যতা গড়ার জন্য আপনার সন্তানকে জামেয়া শামীমাবাদে ভর্তি করান পারেন
+            </p>
+          </div>
+
+          {/* Gallery Placeholder */}
+          <div className="flex justify-center space-x-4 mb-8">
+            {["Photo 1", "Photo 2", "Photo 3", "Photo 4", "Photo 5"].map((label, i) => (
+              <div key={i} className="w-24 h-16 bg-gray-700 rounded flex items-center justify-center">
+                <span className="text-xs text-gray-400">{label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer Bottom */}
+          <div className="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
+            <div className="text-sm text-gray-400 text-center md:text-left space-y-2 md:space-y-0 md:space-x-4 flex flex-wrap items-center">
+              <span>© Jamea Shamimnabad</span>
+              <span>All Rights Reserved</span>
+              <span className="flex items-center space-x-1">
+                <Mail className="w-4 h-4" /> <span>info@jameashamimnabad.com</span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <Phone className="w-4 h-4" /> <span>+8801715035843</span>
+              </span>
+              <span>Developed by Syltech</span>
+            </div>
+
+            <div className="flex space-x-3 mt-4 md:mt-0">
+              <a href="https://www.facebook.com/DarulHikmahInstitute.edu" className="bg-blue-600 hover:bg-blue-700 p-2 rounded transition-colors" target =  '_blank'>
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href="https://www.youtube.com/@DarulHikmahInstitute25" className="bg-red-600 hover:bg-red-700 p-2 rounded transition-colors" target =  '_blank'>
+                <Youtube className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
+}
+
+// ✅ Subcomponents for cleaner JSX
+function FeatureCard({ icon, title, desc }: any) {
+  return (
+    <div className="bg-white p-8 rounded-xl shadow-lg text-center hover:shadow-xl transition-shadow">
+      <div className="w-12 h-12 text-green-600 mx-auto mb-4">{icon}</div>
+      <h4 className="text-xl font-semibold text-green-800 mb-3">{title}</h4>
+      <p className="text-gray-600">{desc}</p>
+    </div>
+  );
+}
+
+function CourseCard({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="bg-white p-8 rounded-xl shadow-lg">
+      <h4 className="text-2xl font-semibold text-green-800 mb-4">{title}</h4>
+      <ul className="space-y-3 text-gray-700">
+        {items.map((item, idx) => (
+          <li key={idx}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function AdmissionCard({ title, date, color = 'black' }: { title: string; date: string; color?: string }) {
+  return (
+    <div className={`bg-[${color}] bg-opacity-20 p-4 rounded-lg`}>
+      <p className="font-semibold">{title}</p>
+      <p>{date}</p>
+    </div>
+  );
 }
