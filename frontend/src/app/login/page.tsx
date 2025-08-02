@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Eye, EyeOff, User, Lock, UserCircle, Users, BookOpen, Shield } from 'lucide-react'
+import { Eye, EyeOff, User, Lock, UserCircle, Users, BookOpen, Shield, Facebook, Youtube } from 'lucide-react'
 
 // Demo credentials for testing
 const DEMO_CREDENTIALS = {
@@ -369,14 +369,31 @@ export default function Login() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <p>&copy; 2025 দারুল হিকমাহ ইনস্টিটিউট. All rights reserved.</p>
-            <p className="mt-2 text-gray-400">True Guidance Project - একটি প্রতিষ্ঠান</p>
+      <footer className="bg-gray-800 text-white py-8">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold mb-2">
+                  দারুল হিকমাহ ইনস্টিটিউটে <span className="text-green-400">৩৫০ জন</span> ছাত্র নিবিড় তত্ত্বাবধানে অধ্যয়নরত রয়েছে
+              </h2>
+              <p className="text-gray-300 text-sm">
+                  দ্বীনি ও জাগতিক শিক্ষার সমন্বয়ে আধুনিক পাঠ্যক্রমে পরিচালিত একটি ন্যাশনাল ধর্মীয় দ্বীনি শিক্ষা প্রতিষ্ঠান
+              </p>
           </div>
-        </div>
-      </footer>
+
+
+            {/* Footer Bottom */}
+          <div className="border-t border-gray-700 pt-6 flex justify-center items-center">
+            <div className="flex space-x-3">
+              <a href="https://www.facebook.com/DarulHikmahInstitute.edu" className="bg-blue-600 hover:bg-blue-700 p-2 rounded transition-colors" target='_blank'>
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href="https://www.youtube.com/@DarulHikmahInstitute25" className="bg-red-600 hover:bg-red-700 p-2 rounded transition-colors" target='_blank'>
+                <Youtube className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+          </div>
+        </footer>
     </div>
   )
 }

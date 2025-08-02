@@ -126,45 +126,25 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold mb-2">
-              জামেয়া শামীমাবাদে প্রাপ্ত <span className="text-green-400">৭৩৯ জন</span> হুজুর নিবিড় তত্ত্বাবধানে অধ্যয়নরত রয়েছে
+                দারুল হিকমাহ ইনস্টিটিউটে <span className="text-green-400">৩৫০ জন</span> ছাত্র নিবিড় তত্ত্বাবধানে অধ্যয়নরত রয়েছে
             </h2>
             <p className="text-gray-300 text-sm">
-              সকাল পরিদর্শন ইসলামে উন্নত সভ্যতা গড়ার জন্য আপনার সন্তানকে জামেয়া শামীমাবাদে ভর্তি করান পারেন
+                দ্বীনি ও জাগতিক শিক্ষার সমন্বয়ে আধুনিক পাঠ্যক্রমে পরিচালিত একটি ন্যাশনাল ধর্মীয় দ্বীনি শিক্ষা প্রতিষ্ঠান
             </p>
-          </div>
+        </div>
 
-          {/* Gallery Placeholder */}
-          <div className="flex justify-center space-x-4 mb-8">
-            {["Photo 1", "Photo 2", "Photo 3", "Photo 4", "Photo 5"].map((label, i) => (
-              <div key={i} className="w-24 h-16 bg-gray-700 rounded flex items-center justify-center">
-                <span className="text-xs text-gray-400">{label}</span>
-              </div>
-            ))}
-          </div>
 
           {/* Footer Bottom */}
-          <div className="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-gray-400 text-center md:text-left space-y-2 md:space-y-0 md:space-x-4 flex flex-wrap items-center">
-              <span>© Jamea Shamimnabad</span>
-              <span>All Rights Reserved</span>
-              <span className="flex items-center space-x-1">
-                <Mail className="w-4 h-4" /> <span>info@jameashamimnabad.com</span>
-              </span>
-              <span className="flex items-center space-x-1">
-                <Phone className="w-4 h-4" /> <span>+8801715035843</span>
-              </span>
-              <span>Developed by Syltech</span>
-            </div>
-
-            <div className="flex space-x-3 mt-4 md:mt-0">
-              <a href="https://www.facebook.com/DarulHikmahInstitute.edu" className="bg-blue-600 hover:bg-blue-700 p-2 rounded transition-colors" target =  '_blank'>
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="https://www.youtube.com/@DarulHikmahInstitute25" className="bg-red-600 hover:bg-red-700 p-2 rounded transition-colors" target =  '_blank'>
-                <Youtube className="w-5 h-5" />
-              </a>
-            </div>
+         <div className="border-t border-gray-700 pt-6 flex justify-center items-center">
+          <div className="flex space-x-3">
+            <a href="https://www.facebook.com/DarulHikmahInstitute.edu" className="bg-blue-600 hover:bg-blue-700 p-2 rounded transition-colors" target='_blank'>
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a href="https://www.youtube.com/@DarulHikmahInstitute25" className="bg-red-600 hover:bg-red-700 p-2 rounded transition-colors" target='_blank'>
+              <Youtube className="w-5 h-5" />
+            </a>
           </div>
+        </div>
         </div>
       </footer>
     </div>
