@@ -1,5 +1,6 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '@/lib/api';
 import { 
   Users, 
   BookOpen, 
@@ -30,29 +31,83 @@ const PrincipalDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [showNoticeModal, setShowNoticeModal] = useState(false);
   const [noticeText, setNoticeText] = useState('');
+  type Student = {
+    _id: string;
+    fullNameBangla?: string;
+    fullName?: string;
+    class?: string;
+    roll?: string;
+    guardianName?: string;
+    guardianContact?: string;
+    lastResult?: string;
+  };
+  
+  type Teacher = {
+    id: string;
+    name: string;
+    phone?: string;
+    teacherData?: {
+      subjectsTaught?: string[];
+      experienceYears?: number;
+    };
+  };
+  
+  type Class = {
+    // Define class properties if needed
+  };
+  
+  const [data, setData] = useState<{ students: Student[]; teachers: Teacher[]; classes: Class[] }>({ students: [], teachers: [], classes: [] });
+  const [stats, setStats] = useState({ totalStudents: 0, totalTeachers: 0, totalClasses: 0, pendingResults: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Sample data
-  const stats = {
-    totalStudents: 450,
-    totalTeachers: 28,
-    totalClasses: 15,
-    pendingResults: 12
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userAuth');
+    router.push('/login');
   };
 
-  const students = [
-    { id: 1, name: 'মোহাম্মদ', class: 'দশম', roll: '001', phone: '01711123456', guardian: 'আব্দুল করিম', lastResult: 'A+' },
-    { id: 2, name: 'ফাতিমা খাতুন', class: 'নবম', roll: '002', phone: '01722234567', guardian: 'মোঃ রহিম', lastResult: 'A' },
-    { id: 3, name: 'আবু বকর সিদ্দিক', class: 'অষ্টম', roll: '003', phone: '01733345678', guardian: 'আলী হাসান', lastResult: 'A+' },
-    { id: 4, name: 'আয়েশা বেগম', class: 'সপ্তম', roll: '004', phone: '01744456789', guardian: 'সালাহউদ্দিন', lastResult: 'A' },
-    { id: 5, name: 'উমর ফারুক', class: 'ষষ্ঠ', roll: '005', phone: '01755567890', guardian: 'ইসমাইল আহমেদ', lastResult: 'B+' }
-  ];
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [studentsRes, teachersRes, classesRes] = await Promise.all([
+        api.get('/students'),
+        api.get('/teachers'),
+        api.get('/classes'),
+      ]);
 
-  const teachers = [
-    { id: 1, name: 'উস্তাদ মোহাম্মদ করিম', subject: 'কুরআন ও তাজবিদ', phone: '01711111111', experience: '15 বছর' },
-    { id: 2, name: 'উস্তাদা ফাতিমা বেগম', subject: 'হাদিস ও ফিকহ', phone: '01722222222', experience: '12 বছর' },
-    { id: 3, name: 'উস্তাদ আবু তাহের', subject: 'আরবি ভাষা', phone: '01733333333', experience: '18 বছর' },
-    { id: 4, name: 'উস্তাদ সালাহউদ্দিন', subject: 'ইসলামিক স্টাডিজ', phone: '01744444444', experience: '10 বছর' }
-  ];
+      setData({
+        students: studentsRes.data?.data || [],
+        teachers: teachersRes.data?.data || [],
+        classes: classesRes.data?.data || [],
+      });
+
+      setStats({
+        totalStudents: studentsRes.data?.count || 0,
+        totalTeachers: teachersRes.data?.count || 0,
+        totalClasses: classesRes.data?.count || 0,
+        pendingResults: 12, // Placeholder
+      });
+
+    } catch (err) {
+      console.error('Fetch error:', err);
+      // Fallback to default/empty state
+      setStats({ 
+        totalStudents: 0, 
+        totalTeachers: 0, 
+        totalClasses: 0, 
+        pendingResults: 0 
+      });
+      setData({ students: [], teachers: [], classes: [] });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
+
 
   const recentResults = [
     { id: 1, student: 'মোহাম্মদ আহমেদ', class: 'দশম', exam: 'মাসিক পরীক্ষা', result: 'A+', date: '২০২৫-০৭-০৮' },
@@ -95,7 +150,7 @@ const PrincipalDashboard = () => {
       </nav>
       
       <div className="absolute bottom-0 w-full p-4 border-t border-green-600">
-        <button className="w-full flex items-center px-4 py-2 text-left hover:bg-green-600 transition-colors">
+        <button onClick={handleLogout} className="w-full flex items-center px-4 py-2 text-left hover:bg-green-600 transition-colors">
           <LogOut className="w-5 h-5 mr-3" />
           লগ আউট
         </button>
@@ -127,10 +182,7 @@ const PrincipalDashboard = () => {
 
   const OverviewTab = () => (
     <div className="space-y-6">
-     <div className="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">স্বাগতম, প্রিন্সিপাল সাহেব</h2>
-      <p className="text-gray-600">আজকের তারিখ: {getBengaliDate()}</p>
-    </div>
+      
 
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -185,82 +237,6 @@ const PrincipalDashboard = () => {
     </div>
   );
 
-  const StudentsTab = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">শিক্ষার্থী তথ্য</h2>
-          <button
-            onClick={() => router.push('/new-student-add')}
-            className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            নতুন শিক্ষার্থী
-          </button>
-        </div>
-        
-        <div className="flex items-center mb-4">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="শিক্ষার্থী খুঁজুন..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead>
-              <tr className="bg-gray-50">
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">নাম</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">শ্রেণী</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">রোল</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">অভিভাবক</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">ফোন</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">সর্বশেষ ফলাফল</th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">অ্যাকশন</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students.map((student) => (
-                <tr key={student.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm text-gray-900">{student.name}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{student.class}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{student.roll}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{student.guardian}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{student.phone}</td>
-                  <td className="px-4 py-3 text-sm">
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      student.lastResult === 'A+' ? 'bg-green-100 text-green-800' :
-                      student.lastResult === 'A' ? 'bg-blue-100 text-blue-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {student.lastResult}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <button className="text-blue-600 hover:text-blue-800">
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button className="text-green-600 hover:text-green-800">
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button className="text-red-600 hover:text-red-800">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
 
   const TeachersTab = () => (
     <div className="space-y-6">
@@ -277,7 +253,7 @@ const PrincipalDashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teachers.map((teacher) => (
+          {data.teachers.map((teacher: any) => (
             <div key={teacher.id} className="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
@@ -293,9 +269,9 @@ const PrincipalDashboard = () => {
                 </div>
               </div>
               <h3 className="font-semibold text-gray-800 mb-1">{teacher.name}</h3>
-              <p className="text-sm text-gray-600 mb-2">{teacher.subject}</p>
+              <p className="text-sm text-gray-600 mb-2">{teacher.teacherData?.subjectsTaught.join(', ') || 'N/A'}</p>
               <p className="text-sm text-gray-500 mb-2">{teacher.phone}</p>
-              <p className="text-xs text-green-600 font-medium">{teacher.experience}</p>
+              <p className="text-xs text-green-600 font-medium">{teacher.teacherData?.experienceYears || 0} বছর</p>
             </div>
           ))}
         </div>
@@ -468,9 +444,33 @@ const PrincipalDashboard = () => {
         </div>
       </div>
     );
-  };
+   };
 
   const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-full">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-700"></div>
+        </div>
+      );
+    }
+
+    if (error) {
+  return (
+    <div className="flex justify-center items-center h-full">
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong className="font-bold">Error:</strong>
+        <span className="block sm:inline"> {error}</span>
+      </div>
+    </div>
+  );
+}
+
+
+    return renderActiveTab();
+  };
+
+  const renderActiveTab = () => {
     switch (activeTab) {
       case 'overview':
         return <OverviewTab />;
