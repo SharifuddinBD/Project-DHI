@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Users, GraduationCap, BookOpen, Award } from 'lucide-react'
+import { MapPin, Users, GraduationCap, BookOpen, Award, Youtube, Facebook } from 'lucide-react'
 
 export default function About() {
   return (
@@ -85,13 +85,13 @@ export default function About() {
                 </div>
               </div>
               <div className="col-span-2">
-                <h4 className="text-xl font-semibold text-green-700 mb-4">মাওলানা আবদুল কাদের</h4>
+                <h4 className="text-xl font-semibold text-green-700 mb-4">জুবায়ের আলম সরকার</h4>
                 <p className="text-gray-700 mb-4">
-                  দারুল হিকমাহ ইনস্টিটিউটের প্রিন্সিপাল হিসেবে দায়িত্ব পালন করছেন। তিনি ২০ বছরের অভিজ্ঞতা নিয়ে আমাদের প্রতিষ্ঠানে শিক্ষার্থীদের সঠিক দিকনির্দেশনা প্রদান করছেন।
+                  দারুল হিকমাহ ইনস্টিটিউটের প্রিন্সিপাল হিসেবে দায়িত্ব পালন করছেন। তিনি ৫ ছরের অভিজ্ঞতা নিয়ে আমাদের প্রতিষ্ঠানে শিক্ষার্থীদের সঠিক দিকনির্দেশনা প্রদান করছেন।
                 </p>
                 <div className="space-y-2">
                   <p><strong>শিক্ষাগত যোগ্যতা:</strong> দাওরায়ে হাদিস, এম.এ (ইসলামিক স্টাডিজ)</p>
-                  <p><strong>অভিজ্ঞতা:</strong> ২০+ বছর শিক্ষকতা ও প্রশাসনিক দায়িত্ব</p>
+                  <p><strong>অভিজ্ঞতা:</strong> ৫+ বছর শিক্ষকতা ও প্রশাসনিক দায়িত্ব</p>
                   <p><strong>বিশেষত্ব:</strong> কোরআন ও হাদিস শিক্ষা, ইসলামী আইন</p>
                 </div>
               </div>
@@ -190,7 +190,7 @@ export default function About() {
                   <GraduationCap className="w-8 h-8 text-white" />
                 </div>
                 <p className="text-3xl font-bold text-yellow-600">১০০</p>
-                <p className="text-sm text-gray-600">নাহেরা বিভাগ</p>
+                <p className="text-sm text-gray-600">নাযেরা বিভাগ</p>
               </div>
               <div className="text-center bg-purple-100 p-6 rounded-lg">
                 <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -227,12 +227,30 @@ export default function About() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="text-center">
-            <p>&copy; 2025 দারুল হিকমাহ ইনস্টিটিউট. All rights reserved.</p>
-            <p className="mt-2 text-gray-400">True Guidance Project - একটি প্রতিষ্ঠান</p>
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold mb-2">
+                দারুল হিকমাহ ইনস্টিটিউটে <span className="text-green-400">৩৫০ জন</span> ছাত্র নিবিড় তত্ত্বাবধানে অধ্যয়নরত রয়েছে
+            </h2>
+            <p className="text-gray-300 text-sm">
+                দ্বীনি ও জাগতিক শিক্ষার সমন্বয়ে আধুনিক পাঠ্যক্রমে পরিচালিত একটি ন্যাশনাল ধর্মীয় দ্বীনি শিক্ষা প্রতিষ্ঠান
+            </p>
+        </div>
+
+
+          {/* Footer Bottom */}
+         <div className="border-t border-gray-700 pt-6 flex justify-center items-center">
+          <div className="flex space-x-3">
+            <a href="https://www.facebook.com/DarulHikmahInstitute.edu" className="bg-blue-600 hover:bg-blue-700 p-2 rounded transition-colors" target='_blank'>
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a href="https://www.youtube.com/@DarulHikmahInstitute25" className="bg-red-600 hover:bg-red-700 p-2 rounded transition-colors" target='_blank'>
+              <Youtube className="w-5 h-5" />
+            </a>
           </div>
+        </div>
         </div>
       </footer>
     </div>
